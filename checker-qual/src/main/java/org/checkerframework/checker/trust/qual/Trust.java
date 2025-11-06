@@ -1,0 +1,22 @@
+package org.checkerframework.checker.trust.qual;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.checkerframework.framework.qual.SubtypeOf;
+
+/**
+ * The Trust annotation is used to specify the trust level of methods or types.
+ *
+ * <p>The category element indicates the trust level, with higher numbers representing higher
+ * trust.
+ */
+@Documented
+@SubtypeOf({})
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Trust {
+  int category() default 0;
+}
