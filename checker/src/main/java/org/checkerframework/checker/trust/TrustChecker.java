@@ -5,4 +5,10 @@ import org.checkerframework.framework.source.SupportedLintOptions;
 
 /** A type-checker plug-in for the Trust type system. */
 @SupportedLintOptions({"debugSpew"})
-public class TrustChecker extends BaseTypeChecker {}
+public class TrustChecker extends BaseTypeChecker {
+
+  /** Constructs a TrustChecker. */
+  public TrustChecker() {
+    super();
+  }
+}

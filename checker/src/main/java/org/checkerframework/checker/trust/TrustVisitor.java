@@ -13,10 +13,19 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror;
 /** Visitor for the {@link TrustChecker}. */
 public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
 
+  /**
+   * Creates a {@link TrustVisitor}.
+   *
+   * @param checker the trust checker
+   */
   public TrustVisitor(BaseTypeChecker checker) {
     super(checker);
   }
 
+  /**
+   * Visits a method invocation to check that the receiver's trust category is at least as high as
+   * the invoked method's trust category.
+   */
   @Override
   public Void visitMethodInvocation(MethodInvocationTree node, Void p) {
     AnnotatedTypeMirror invokedMethod = atypeFactory.methodFromUse(node).executableType;
@@ -39,6 +48,12 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
     return super.visitMethodInvocation(node, p);
   }
 
+  /**
+   * Extracts the trust category value from the annotation element values.
+   *
+   * @param elementValues the annotation element values
+   * @return the trust category value, or null if not found
+   */
   private Integer getCategoryValue(
       Map<? extends ExecutableElement, ? extends AnnotationValue> elementValues) {
     if (elementValues == null) return null;
@@ -56,6 +71,10 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
     return null;
   }
 
+  /**
+   * Ensures that variable declarations inherit the Trust annotation from their class if not
+   * explicitly annotated.
+   */
   @Override
   public Void visitVariable(VariableTree variable, Void p) {
     AnnotatedTypeMirror varType = atypeFactory.getAnnotatedType(variable.getType());
