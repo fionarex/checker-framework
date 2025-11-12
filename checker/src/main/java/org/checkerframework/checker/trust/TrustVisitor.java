@@ -10,6 +10,7 @@ import org.checkerframework.checker.trust.qual.TrustType;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.common.basetype.BaseTypeVisitor;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
+import org.checkerframework.framework.type.AnnotatedTypeMirror.AnnotatedExecutableType;
 
 /** Visitor for the {@link TrustChecker}. */
 public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
@@ -107,4 +108,12 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
     }
     return super.visitVariable(variable, p);
   }
+
+  /**
+   * Copy and Pasted from Tainted Checker Don't check that the constructor result is top. Checking
+   * that the super() or this() call is a subtype of the constructor result is sufficient.
+   */
+  @Override
+  protected void checkConstructorResult(
+      AnnotatedExecutableType constructorType, ExecutableElement constructorElement) {}
 }
