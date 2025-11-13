@@ -5,8 +5,7 @@ import com.sun.source.tree.VariableTree;
 import java.util.Map;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
-import org.checkerframework.checker.trust.qual.TrustReq;
-import org.checkerframework.checker.trust.qual.TrustType;
+import org.checkerframework.checker.trust.qual.Trust;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.common.basetype.BaseTypeVisitor;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
@@ -32,15 +31,15 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
   public Void visitMethodInvocation(MethodInvocationTree node, Void p) {
     AnnotatedTypeMirror invokedMethod = atypeFactory.methodFromUse(node).executableType;
 
-    if (invokedMethod.hasPrimaryAnnotation(TrustType.class)) {
+    if (invokedMethod.hasPrimaryAnnotation(Trust.class)) {
       Integer methodTrustLevel =
-          getLevel(invokedMethod.getPrimaryAnnotation(TrustReq.class).getElementValues());
+          getLevel(invokedMethod.getPrimaryAnnotation(Trust.class).getElementValues());
 
       AnnotatedTypeMirror receiver = atypeFactory.getReceiverType(node);
       Integer receiverCategory = null;
-      if (receiver != null && receiver.hasPrimaryAnnotation(TrustReq.class)) {
+      if (receiver != null && receiver.hasPrimaryAnnotation(Trust.class)) {
         receiverCategory =
-            getLevel(receiver.getPrimaryAnnotation(TrustReq.class).getElementValues());
+            getLevel(receiver.getPrimaryAnnotation(Trust.class).getElementValues());
       }
 
       if (methodTrustLevel != null
@@ -52,8 +51,8 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
       for (int i = 0; i < node.getArguments().size(); i++) {
         AnnotatedTypeMirror argType = atypeFactory.getAnnotatedType(node.getArguments().get(i));
         Integer argCategory =
-            argType.hasPrimaryAnnotation(TrustType.class)
-                ? getLevel(argType.getPrimaryAnnotation(TrustType.class).getElementValues())
+            argType.hasPrimaryAnnotation(Trust.class)
+                ? getLevel(argType.getPrimaryAnnotation(Trust.class).getElementValues())
                 : null;
         if (methodTrustLevel != null && argCategory != null && argCategory < methodTrustLevel) {
           checker.reportError(
@@ -95,15 +94,15 @@ public class TrustVisitor extends BaseTypeVisitor<TrustAnnotatedTypeFactory> {
   @Override
   public Void visitVariable(VariableTree variable, Void p) {
     AnnotatedTypeMirror varType = atypeFactory.getAnnotatedType(variable.getType());
-    if (varType.hasPrimaryAnnotation(TrustType.class)) {
+    if (varType.hasPrimaryAnnotation(Trust.class)) {
       Integer classTrustLevel =
-          getLevel(varType.getPrimaryAnnotation(TrustType.class).getElementValues());
+          getLevel(varType.getPrimaryAnnotation(Trust.class).getElementValues());
       AnnotatedTypeMirror declaredType = atypeFactory.getAnnotatedType(variable);
       if (classTrustLevel != null
-          && (!declaredType.hasPrimaryAnnotation(TrustType.class)
-              || !getLevel(declaredType.getPrimaryAnnotation(TrustType.class).getElementValues())
+          && (!declaredType.hasPrimaryAnnotation(Trust.class)
+              || !getLevel(declaredType.getPrimaryAnnotation(Trust.class).getElementValues())
                   .equals(classTrustLevel))) {
-        declaredType.addAnnotation(varType.getPrimaryAnnotation(TrustType.class));
+        declaredType.addAnnotation(varType.getPrimaryAnnotation(Trust.class));
       }
     }
     return super.visitVariable(variable, p);

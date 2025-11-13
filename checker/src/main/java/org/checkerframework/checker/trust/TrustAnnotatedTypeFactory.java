@@ -7,7 +7,6 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.util.Elements;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.trust.qual.Trust;
-import org.checkerframework.checker.trust.qual.TrustType;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.type.MostlyNoElementQualifierHierarchy;
@@ -24,9 +23,6 @@ public class TrustAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
   /** AnnotationMirror for {@link Trust}. */
   protected final AnnotationMirror TRUST;
 
-  /** AnnotationMirror for {@link TrustType} */
-  protected final AnnotationMirror TRUST_TYPE;
-
   /**
    * Creates a {@link TrustAnnotatedTypeFactory}.
    *
@@ -36,7 +32,6 @@ public class TrustAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
   public TrustAnnotatedTypeFactory(BaseTypeChecker checker) {
     super(checker);
     TRUST = AnnotationBuilder.fromClass(elements, Trust.class);
-    TRUST_TYPE = AnnotationBuilder.fromClass(elements, TrustType.class);
     this.postInit();
   }
 
